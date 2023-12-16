@@ -1,11 +1,11 @@
-# UEFI Boot Standalone NixOS (2023-10-21)
+# UEFI Boot Standalone NixOS (2023-11-19)
 
 This guide will build and was tested with the following software:
 * Asahi Linux kernel version 6.5.0-asahi15
 * Asahi Linux's Mesa version 23.3.0_asahi-20230904-1
 * m1n1 version v1.4.2
 * Asahi Linux's U-Boot version 2023.07.02.asahi3-1
-* Nixpkgs, as of 2023-10-19
+* Nixpkgs, as of 2023-11-19
 * macOS stub 12.3
 
 NOTE: The latest version of this guide will always be [at its home](https://github.com/tpwrules/nixos-apple-silicon/blob/main/docs/uefi-standalone.md). For more general information about Linux on Apple Silicon Macs, refer to the [Asahi Linux project](https://asahilinux.org/) and [alpha installer release](https://asahilinux.org/2022/03/asahi-linux-alpha-release/).
@@ -246,12 +246,17 @@ Currently, the only supported way to update the peripheral firmware files is to 
   # hardware.asahi.extractPeripheralFirmware = false;
 ```
 
+<details>
+  <summary>If you have apps incompatible with 16K page sizes and you need 4K page size instead...</summary>
+
+**Note:** The 4K patches are currently not updated to latest kernel version. See [this issue](https://github.com/tpwrules/nixos-apple-silicon/issues/43).
 You can choose to build the Asahi kernel with a 4K page size by enabling the appropriate option. This results in a reduction in raw compilation speed of 10-25%, but improves software compatibility in some cases (such as with Chromium/Electron and x86 emulation).
 ```
   # Build the kernel with 4K pages to improve software compatibility at
   # the cost of performance in some cases.
   hardware.asahi.use4KPages = true;
 ```
+</details>
 
 If you want to install a desktop environment, you will have to uncomment the option to enable X11 and NetworkManager, then add an option to include your favorite desktop environment. You may also wish to include graphical packages such as `firefox` in `environment.systemPackages`. For example, to install Xfce:
 ```
@@ -267,6 +272,14 @@ Some keyboard layouts are not detected correctly. On some devices, the \` key is
    options hid_apple iso_layout=0
  '';
  ```
+
+`iwd` is recommended for WiFi on most systems:
+```
+networking.wireless.iwd = {
+  enable = true;
+  settings.General.EnableNetworkConfiguration = true;
+};
+```
 
 #### NixOS Installation
 
