@@ -5,7 +5,7 @@
     nixpkgs = {
       # https://hydra.nixos.org/jobset/mobile-nixos/unstable/evals
       # these evals have a cross-compiled stdenv available
-      url = "github:nixos/nixpkgs/91a00709aebb3602f172a0bf47ba1ef013e34835";
+      url = "github:nixos/nixpkgs/54aac082a4d9bb5bbc5c4e899603abfb76a3f6d6";
     };
 
     rust-overlay = {
@@ -46,6 +46,7 @@
             };
           in {
             inherit (pkgs) m1n1 uboot-asahi linux-asahi asahi-fwextract mesa-asahi-edge;
+            inherit (pkgs) speakersafetyd bankstown-lv2 asahi-audio;
 
             installer-bootstrap =
               let
